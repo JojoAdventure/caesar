@@ -15,11 +15,36 @@
 # limitations under the License.
 #
 import webapp2
+import cgi
+from caesar import encrypt
 
-class MainHandler(webapp2.RequestHandler):
+rot_head = """<h1>Enter whatever</h1>"""
+rot_form = """
+<form method="post">
+    <div>
+        <label for="rot">Rotate this shit by:</label>
+        <input type="text" name="rot" value="0">
+    </div>
+    <textarea name="text" style="height: 100px; width: 400px;">%(text)s</textarea>
+    <br>
+    <input type="submit">
+</form>
+"""
+
+class Index(webapp2.RequestHandler):
+    def writeit(self, text="", rot="0"):
+        self.response.out.write(rot_head + rot_form % {"text": cgi.escape(text, quote=True), "rot": cgi.escape(rot,quote=True)})
+
     def get(self):
-        self.response.write('Hello world!')
+        self.writeit()
+
+    def post(self):
+        user_text = self.request.get("text")
+        user_rot = self.request.get("rot")
+        rottext = encrypt(user_text,int(user_rot))
+        esctext = cgi.escape(rottext, quote=True)
+        self.writeit(esctext)
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', Index)
 ], debug=True)
