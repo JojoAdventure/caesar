@@ -22,7 +22,7 @@ rot_head = """<h1>Enter whatever</h1>"""
 rot_form = """
 <form method="post">
     <div>
-        <label for="rot">Rotate this shit by:</label>
+        <label for="rot">Rotate by:</label>
         <input type="text" name="rot" value="0">
     </div>
     <textarea name="text" style="height: 100px; width: 400px;">%(text)s</textarea>
